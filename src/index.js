@@ -28,21 +28,20 @@ export default function ({ transform, transformFromAst, traverse, types: t }) {
 
 
 	let persistentContext = {};
-	function compileFunction(code) {
-		var fn = new Function('require', '__dirname', '__filename', code);
+	function compileFunction(code, params) {
+		let d = params.__dirname;
+		params.require = function req(mod) {
+			if (mod[0] == '.')
+				mod = _path.join(d, mod);
 
-		return function (d) {
-			function req(mod) {
-				if (mod.startsWith('.'))
-					mod = _path.join(d, mod);
+			return require(mod);
+		}
 
-				return require(mod);
-			}
-			let args = [req];
-			for (let i=0; i<arguments.length; ++i)
-				args.push(arguments[i]);
+		let orgs = Object.keys(params),
+			args = orgs.map(key => params[key]),
+			fn = new Function(orgs.join(), code);
 
-
+		return function () {
 			let c = process.cwd(), result;
 			try {
 				process.chdir(d);
@@ -61,31 +60,43 @@ export default function ({ transform, transformFromAst, traverse, types: t }) {
 			CallExpression (path, state) {
 				const { node } = path;
 				if (!t.isIdentifier(node.callee, {name: 'ceval'})) return;
-				let args = path.get('arguments').map(arg => {
-					let t = arg.evaluate();
-					return t.confident ? t.value : arg.node;
-				});
+				let filename = _path.resolve(node.loc.filename || path.hub.file.opts.filename);
+				let params = {
+					__filename: filename,
+					__dirname: _path.dirname(filename)
+				};
 
-				let filename = _path.resolve(node.loc.filename || path.hub.file.opts.filename),
-					dirname = _path.dirname(filename);
 
-				let nd;
-				if (typeof args[0] == 'string') {
-					let code = args[0];
+				let args = path.get('arguments'),
+					arg1 = args[0].evaluate(),
+					nd;
+
+				if (arg1.confident) {
+					if (typeof arg1.value!='string' || args.length>1) return;
+					
+					let code = arg1.value;
 					if (code.indexOf('return'))
 						code = 'return (' + code + ')';
-					let res = compileFunction(code)(dirname, filename);
+					let res = compileFunction(code, params)();
 					nd = makeLiteral(res);
 				}
+				else if (t.isFunction(args[0])) {
+					let funcNode = args[0].node;
+					if (funcNode.params.length+1 != args.length) return;
 
-				if (t.isFunction(args[0])) {
-					let code = transformFromAst(t.program(args[0].body.body)).code,
-						res = compileFunction(code)(dirname, filename);
+					for (let i=0; i<funcNode.params.length; ++i) {
+						let ev = args[i+1].evaluate();
+						params[funcNode.params[i].name] = ev.confident ? ev.value : void 0;
+					}
+
+					let code = transformFromAst(t.program(funcNode.body.body)).code,
+						res = compileFunction(code, params)();
 
 					if (typeof res == 'string')
 						nd = transform(res).ast.program.body;
 					else nd = makeLiteral(res);
 				}
+				else return;
 
 				if (nd) {
 					traverse.removeProperties(nd);
