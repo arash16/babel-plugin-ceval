@@ -2,6 +2,17 @@
 
 > This plugin allows [Babel](https://babeljs.io) to execute ceval functions at compile time.
 
+## API
+
+### `ceval(expression: string)`
+
+Return value is used as is, cannot return code fragments.
+
+### `ceval(fn: function([args..])[, args..])
+
+If return value is a string, it is expected to be code fragment. If you need to return
+a string value, simply enclose with quotations.
+
 ## Examples
 
 ```javascript
