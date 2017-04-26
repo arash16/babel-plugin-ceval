@@ -50,6 +50,18 @@ console.log(0);console.log(1);console.log(2);console.log(3);
 
 ```javascript
 // In:
+var code = ceval(function() {
+	var r = '';
+	for (var i=0; i<3; ++i)
+		r += 'console.log('+i+');';
+	return '"' + r + '"';
+});
+// Out:
+var code = 'console.log(0);console.log(1);console.log(2);';
+```
+
+```javascript
+// In:
 ceval(function() {
 	if (process.env.DEBUG)
 		return function checker(x) { 

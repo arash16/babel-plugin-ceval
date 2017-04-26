@@ -17,10 +17,10 @@ export default function ({ transform, transformFromAst, traverse, types: t }) {
 					return t.regExpLiteral(vals[1], vals[2]);
 				}
 
-				return transform('(' + JSON.stringify(value) + ')').ast.program.body[0];
+				return transform('(' + JSON.stringify(value) + ')', {code: false}).ast.program.body[0];
 
 			case 'function':
-				return transform('(' + value.toString() + ')').ast.program.body[0].expression;
+				return transform('(' + value.toString() + ')', {code: false}).ast.program.body[0].expression;
 
 			default: throw new Error('Not Implemented.');
 		}
@@ -92,8 +92,12 @@ export default function ({ transform, transformFromAst, traverse, types: t }) {
 					let code = transformFromAst(t.program(funcNode.body.body)).code,
 						res = compileFunction(code, params)();
 
-					if (typeof res == 'string')
-						nd = transform(res).ast.program.body;
+					if (typeof res == 'string') {
+						let ast = transform(res, {code: false}).ast;
+						nd = !ast.program.body.length && ast.program.directives.length
+							? t.stringLiteral(ast.program.directives[0].value.value)
+							: ast.program.body;
+					}
 					else nd = makeLiteral(res);
 				}
 				else return;
@@ -109,8 +113,10 @@ export default function ({ transform, transformFromAst, traverse, types: t }) {
 
 						else nd.type = 'FunctionExpression';
 					}
-					if (Array.isArray(nd))
-						path.replaceWithMultiple(nd);
+					if (Array.isArray(nd)) {
+						if (!nd.length) path.remove();
+						else path.replaceWithMultiple(nd);
+					}
 					else path.replaceWith(nd);
 				}
 				else path.remove();
