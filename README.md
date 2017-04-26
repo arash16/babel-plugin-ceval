@@ -10,7 +10,14 @@
   - [Via Node API](#toc-node)
 - [API](#toc-api)
 - [Examples](#toc-examples)
-
+  - [Reading environment variables](#toc-ex1)
+  - [Current source directory / filename](#toc-ex1)
+  - [Version information inside package.json](#toc-ex1)
+  - [Generate js code via js code](#toc-ex1)
+  - [Return string from ceval(fn: function)](#toc-ex1)
+  - [Different functions for different environments](#toc-ex1)
+  - [Reading outside variables (they must be statically evaluatable)](#toc-ex1)
+  - [Return complete objects](#toc-ex1)
 
 
 ## <a id="toc-install"></a>Installation
@@ -58,7 +65,7 @@ a string value, simply enclose it with quotations (If string contains quotations
 
 ## <a id="toc-examples"></a>Examples
 
-### Reading environment variables
+### <a id="toc-ex1"></a>Reading environment variables
 
 ```javascript
 // In:
@@ -67,7 +74,7 @@ var envPath = ceval('process.env.PATH');
 var envPath = '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games';
 ```
 
-### Current source directory / filename
+### <a id="toc-ex2"></a>Current source directory / filename
 
 ```javascript
 // In:
@@ -78,7 +85,7 @@ var dirname = '/home/arash16/Projects/ceval-test';
 var filename = '/home/arash16/Projects/ceval-test/test.js';
 ```
 
-### Version information inside package.json
+### <a id="toc-ex3"></a>Version information inside package.json
 
 ```javascript
 // In:
@@ -87,7 +94,7 @@ var version = ceval('require("./package.json").version');
 var version = '1.0.0';
 ```
 
-### Generate js code via js code
+### <a id="toc-ex4"></a>Generate js code via js code
 
 ```javascript
 // In:
@@ -101,7 +108,7 @@ ceval(function() {
 console.log(0);console.log(1);console.log(2);console.log(3);
 ```
 
-### Return string from ceval(fn: function)
+### <a id="toc-ex5"></a>Return string from ceval(fn: function)
 
 ```javascript
 // In:
@@ -115,7 +122,7 @@ var code = ceval(function() {
 var code = 'console.log(0);console.log(1);console.log(2);';
 ```
 
-### Different functions for different environments
+### <a id="toc-ex6"></a>Different functions for different environments
 
 ```javascript
 // In:
@@ -135,7 +142,7 @@ function checker(x) {
 }
 ```
 
-### Reading outside variables (they must be statically evaluatable)
+### <a id="toc-ex7"></a>Reading outside variables (they must be statically evaluatable)
 
 ```javascript
 // In:
@@ -149,7 +156,7 @@ const X = 1,
 console.log(3);
 ```
 
-### Return complete objects
+### <a id="toc-ex8"></a>Return complete objects
 
 ```javascript
 // In:
