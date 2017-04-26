@@ -6,12 +6,12 @@
 
 ### `ceval(expression: string)`
 
-Return value is used as is, cannot return code fragments.
+Return value is used as is, it cannot return code fragments.
 
-### `ceval(fn: function([args..])[, args..])
+### `ceval(fn: function([args..])[, args..])`
 
-If return value is a string, it is expected to be code fragment. If you need to return
-a string value, simply enclose with quotations.
+If it returns a string, it is expected to be a code fragment. If you need to return
+a string value, simply enclose it with quotations.
 
 ## Examples
 
