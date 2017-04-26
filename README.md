@@ -2,7 +2,7 @@
 
 > This plugin allows [Babel](https://babeljs.io) to execute ceval functions at compile time.
 
-# Table of Contents
+## Table of Contents
 - [Installation](#toc-install)
 - [Usage](#toc-usage)
   - [Via .babelrc](#toc-babelrc)
