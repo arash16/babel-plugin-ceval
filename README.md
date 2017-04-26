@@ -40,7 +40,7 @@ var version = '1.0.0';
 // In:
 ceval(function() {
 	var r = '';
-	for (var i=0; i<10; ++i)
+	for (var i=0; i<4; ++i)
 		r += 'console.log('+i+');';
 	return r;
 });
