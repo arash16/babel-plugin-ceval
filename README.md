@@ -11,7 +11,7 @@ Return value is used as is, it cannot return code fragments.
 ### `ceval(fn: function([args..])[, args..])`
 
 If it returns a string, it is expected to be a code fragment. If you need to return
-a string value, simply enclose it with quotations.
+a string value, simply enclose it with quotations (If string contains quotations, use JSON.stringify).
 
 ## Examples
 
