@@ -2,15 +2,26 @@
 
 > This plugin allows [Babel](https://babeljs.io) to execute ceval functions at compile time.
 
-## Installation
+# Table of Contents
+- [Installation](#toc-install)
+- [Usage](#toc-usage)
+  - [Via .babelrc](#toc-babelrc)
+  - [Via CLI](#toc-cli)
+  - [Via Node API](#toc-node)
+- [API](#toc-api)
+- [Examples](#toc-examples)
+
+
+
+## <a id="toc-install"></a>Installation
 
 ```sh
 npm install --save-dev babel-plugin-ceval
 ```
 
-## Usage
+## <a id="toc-usage"></a>Usage
 
-### Via [.babelrc](http://babeljs.io/docs/usage/babelrc/) (Recommended)
+### <a id="toc-babelrc"></a>Via [.babelrc](http://babeljs.io/docs/usage/babelrc/) (Recommended)
 
 **.babelrc**
 
@@ -20,13 +31,13 @@ npm install --save-dev babel-plugin-ceval
 }
 ```
 
-### Via CLI
+### <a id="toc-cli"></a>Via CLI
 
 ```sh
 babel --plugins ceval script.js
 ```
 
-### Via Node API
+### <a id="toc-node"></a>Via Node API
 
 ```javascript
 require("babel-core").transform("code", {
@@ -34,7 +45,7 @@ require("babel-core").transform("code", {
 });
 ```
 
-## API
+## <a id="toc-api"></a>API
 
 ### `ceval(expression: string)`
 
@@ -45,7 +56,7 @@ Return value is used as is, it cannot return code fragments.
 If it returns a string, it is expected to be a code fragment. If you need to return
 a string value, simply enclose it with quotations (If string contains quotations, use JSON.stringify).
 
-## Examples
+## <a id="toc-examples"></a>Examples
 
 ### Reading environment variables
 
