@@ -1,6 +1,6 @@
 # babel-plugin-ceval
 
-> This plugin allows Babel to execute ceval functions at compile time.
+> This plugin allows [Babel](https://babeljs.io) to execute ceval functions at compile time.
 
 ## Examples
 
@@ -63,7 +63,7 @@ npm install --save-dev babel-plugin-ceval
 
 ## Usage
 
-### Via `.babelrc` (Recommended)
+### Via [.babelrc](http://babeljs.io/docs/usage/babelrc/) (Recommended)
 
 **.babelrc**
 
