@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-ceval",
-  "version": "1.4.3",
+  "version": "1.6.0",
   "description": "a babel pluging for compile time evaluation.",
   "main": "lib/index.js",
   "scripts": {
