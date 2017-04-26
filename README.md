@@ -15,6 +15,8 @@ a string value, simply enclose it with quotations (If string contains quotations
 
 ## Examples
 
+* Reading environment variables
+
 ```javascript
 // In:
 var envPath = ceval('process.env.PATH');
@@ -22,12 +24,18 @@ var envPath = ceval('process.env.PATH');
 var envPath = '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games';
 ```
 
+* Current source directory / filename
+
 ```javascript
 // In:
 var dirname = ceval('__dirname');
+var filename= ceval('__filename');
 // Out:
 var dirname = '/home/arash16/Projects/ceval-test';
+var filename = '/home/arash16/Projects/ceval-test/test.js';
 ```
+
+* Version information inside package.json
 
 ```javascript
 // In:
@@ -35,6 +43,8 @@ var version = ceval('require("./package.json").version');
 // Out:
 var version = '1.0.0';
 ```
+
+* Generate js code via js code
 
 ```javascript
 // In:
@@ -48,22 +58,26 @@ ceval(function() {
 console.log(0);console.log(1);console.log(2);console.log(3);
 ```
 
+* Return string from ceval(fn: function)
+
 ```javascript
 // In:
 var code = ceval(function() {
 	var r = '';
 	for (var i=0; i<3; ++i)
 		r += 'console.log('+i+');';
-	return '"' + r + '"';
+	return JSON.stringify(r);
 });
 // Out:
 var code = 'console.log(0);console.log(1);console.log(2);';
 ```
 
+* Different functions for different environments
+
 ```javascript
 // In:
 ceval(function() {
-	if (process.env.DEBUG)
+	if (process.env.SERVER)
 		return function checker(x) { 
 			return x>2; 
 		};
@@ -78,6 +92,8 @@ function checker(x) {
 }
 ```
 
+* Reading outside variables (they must be statically evaluatable)
+
 ```javascript
 // In:
 const X = 1, Y = 2;
@@ -89,6 +105,8 @@ const X = 1,
       Y = 2;
 console.log(3);
 ```
+
+* Return complete objects
 
 ```javascript
 // In:
