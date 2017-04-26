@@ -7,7 +7,6 @@
 - [Usage](#toc-usage)
   - [Via .babelrc](#toc-babelrc)
   - [Via CLI](#toc-cli)
-  - [Via Node API](#toc-node)
 - [API](#toc-api)
 - [Examples](#toc-examples)
   - [Reading environment variables](#toc-ex1)
@@ -42,14 +41,6 @@ npm install --save-dev babel-plugin-ceval
 
 ```sh
 babel --plugins ceval script.js
-```
-
-### <a id="toc-node"></a>Via Node API
-
-```javascript
-require("babel-core").transform("code", {
-  plugins: ["ceval"]
-});
 ```
 
 ## <a id="toc-api"></a>API
