@@ -2,17 +2,6 @@
 
 > This plugin allows [Babel](https://babeljs.io) to execute ceval functions at compile time.
 
-## API
-
-### `ceval(expression: string)`
-
-Return value is used as is, it cannot return code fragments.
-
-### `ceval(fn: function([args..])[, args..])`
-
-If it returns a string, it is expected to be a code fragment. If you need to return
-a string value, simply enclose it with quotations (If string contains quotations, use JSON.stringify).
-
 ## Installation
 
 ```sh
@@ -44,6 +33,17 @@ require("babel-core").transform("code", {
   plugins: ["ceval"]
 });
 ```
+
+## API
+
+### `ceval(expression: string)`
+
+Return value is used as is, it cannot return code fragments.
+
+### `ceval(fn: function([args..])[, args..])`
+
+If it returns a string, it is expected to be a code fragment. If you need to return
+a string value, simply enclose it with quotations (If string contains quotations, use JSON.stringify).
 
 ## Examples
 
