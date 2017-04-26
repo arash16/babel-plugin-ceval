@@ -78,6 +78,43 @@ function checker(x) {
 }
 ```
 
+```javascript
+// In:
+const X = 1, Y = 2;
+ceval(function(a, b) {
+	return 'console.log(' + (a+b) + ');';
+}, X, Y);
+// Out:
+const X = 1,
+      Y = 2;
+console.log(3);
+```
+
+```javascript
+// In:
+var obj = ceval(function() {
+	return {
+		regex: /abc/g,
+		str: 'asdas',
+		arr: [1,2, { x: 1}],
+		fn: function (a, b) {
+			return a + b;
+		}
+	};
+});
+// Out:
+var obj = {
+	'regex': /abc/g,
+	'str': 'asdas',
+	'arr': [1, 2, {
+		'x': 1
+	}],
+	'fn': function (a, b) {
+		return a + b;
+	}
+};
+```
+
 ## Installation
 
 ```sh

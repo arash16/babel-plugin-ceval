@@ -8,6 +8,8 @@ export default function ({ transform, transformFromAst, traverse, types: t }) {
 			case 'number': return t.numericLiteral(value);
 			case 'boolean': return t.booleanLiteral(value);
 			case 'undefined': return t.unaryExpression('void', t.numericLiteral(0), true);
+			case 'function':
+				return transform('(' + value.toString() + ')', {code: false}).ast.program.body[0].expression;
 			case 'object':
 				if (!value)
 					return t.nullLiteral();
@@ -16,11 +18,21 @@ export default function ({ transform, transformFromAst, traverse, types: t }) {
 					let vals = value.toString().split('/');
 					return t.regExpLiteral(vals[1], vals[2]);
 				}
+				
+				if (Array.isArray(value)) {
+					let result = t.arrayExpression();
+					result.elements = value.map(makeLiteral);
+					return result;
+				}
 
-				return transform('(' + JSON.stringify(value) + ')', {code: false}).ast.program.body[0];
-
-			case 'function':
-				return transform('(' + value.toString() + ')', {code: false}).ast.program.body[0].expression;
+				return t.objectExpression(
+					Object.keys(value).map(key => 
+						t.objectProperty(
+							t.stringLiteral(key), 
+							makeLiteral(value[key])
+						)
+					)
+				);
 
 			default: throw new Error('Not Implemented.');
 		}
