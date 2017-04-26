@@ -15,7 +15,7 @@ a string value, simply enclose it with quotations (If string contains quotations
 
 ## Examples
 
-* Reading environment variables
+### Reading environment variables
 
 ```javascript
 // In:
@@ -24,7 +24,7 @@ var envPath = ceval('process.env.PATH');
 var envPath = '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games';
 ```
 
-* Current source directory / filename
+### Current source directory / filename
 
 ```javascript
 // In:
@@ -35,7 +35,7 @@ var dirname = '/home/arash16/Projects/ceval-test';
 var filename = '/home/arash16/Projects/ceval-test/test.js';
 ```
 
-* Version information inside package.json
+### Version information inside package.json
 
 ```javascript
 // In:
@@ -44,7 +44,7 @@ var version = ceval('require("./package.json").version');
 var version = '1.0.0';
 ```
 
-* Generate js code via js code
+### Generate js code via js code
 
 ```javascript
 // In:
@@ -58,7 +58,7 @@ ceval(function() {
 console.log(0);console.log(1);console.log(2);console.log(3);
 ```
 
-* Return string from ceval(fn: function)
+### Return string from ceval(fn: function)
 
 ```javascript
 // In:
@@ -72,7 +72,7 @@ var code = ceval(function() {
 var code = 'console.log(0);console.log(1);console.log(2);';
 ```
 
-* Different functions for different environments
+### Different functions for different environments
 
 ```javascript
 // In:
@@ -92,7 +92,7 @@ function checker(x) {
 }
 ```
 
-* Reading outside variables (they must be statically evaluatable)
+### Reading outside variables (they must be statically evaluatable)
 
 ```javascript
 // In:
@@ -106,7 +106,7 @@ const X = 1,
 console.log(3);
 ```
 
-* Return complete objects
+### Return complete objects
 
 ```javascript
 // In:
