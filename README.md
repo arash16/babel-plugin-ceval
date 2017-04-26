@@ -9,7 +9,23 @@
 var envPath = ceval('process.env.PATH');
 // Out:
 var envPath = '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games';
+```
 
+```javascript
+// In:
+var dirname = ceval('__dirname');
+// Out:
+var dirname = '/home/arash16/Projects/ceval-test';
+```
+
+```javascript
+// In:
+var version = ceval('require("./package.json").version');
+// Out:
+var version = '1.0.0';
+```
+
+```javascript
 // In:
 ceval(function() {
 	var r = '';
@@ -19,6 +35,24 @@ ceval(function() {
 });
 // Out:
 console.log(0);console.log(1);console.log(2);console.log(3);
+```
+
+```javascript
+// In:
+ceval(function() {
+	if (process.env.DEBUG)
+		return function checker(x) { 
+			return x>2; 
+		};
+	
+	return function checker(x) { 
+		return x>0; 
+	};
+});
+// Out:
+function checker(x) {
+	return x > 0;
+}
 ```
 
 ## Installation
