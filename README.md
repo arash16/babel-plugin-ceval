@@ -11,13 +11,13 @@
 - [API](#toc-api)
 - [Examples](#toc-examples)
   - [Reading environment variables](#toc-ex1)
-  - [Current source directory / filename](#toc-ex1)
-  - [Version information inside package.json](#toc-ex1)
-  - [Generate js code via js code](#toc-ex1)
-  - [Return string from ceval(fn: function)](#toc-ex1)
-  - [Different functions for different environments](#toc-ex1)
-  - [Reading outside variables (they must be statically evaluatable)](#toc-ex1)
-  - [Return complete objects](#toc-ex1)
+  - [Current source directory / filename](#toc-ex2)
+  - [Version information inside package.json](#toc-ex3)
+  - [Generate js code via js code](#toc-ex4)
+  - [Return string from ceval(fn: function)](#toc-ex5)
+  - [Different functions for different environments](#toc-ex6)
+  - [Reading outside variables (they must be statically evaluatable)](#toc-ex7)
+  - [Return complete objects](#toc-ex8)
 
 
 ## <a id="toc-install"></a>Installation
