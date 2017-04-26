@@ -13,6 +13,38 @@ Return value is used as is, it cannot return code fragments.
 If it returns a string, it is expected to be a code fragment. If you need to return
 a string value, simply enclose it with quotations (If string contains quotations, use JSON.stringify).
 
+## Installation
+
+```sh
+npm install --save-dev babel-plugin-ceval
+```
+
+## Usage
+
+### Via [.babelrc](http://babeljs.io/docs/usage/babelrc/) (Recommended)
+
+**.babelrc**
+
+```json
+{
+  "plugins": ["ceval"]
+}
+```
+
+### Via CLI
+
+```sh
+babel --plugins ceval script.js
+```
+
+### Via Node API
+
+```javascript
+require("babel-core").transform("code", {
+  plugins: ["ceval"]
+});
+```
+
 ## Examples
 
 ### Reading environment variables
@@ -131,36 +163,4 @@ var obj = {
 		return a + b;
 	}
 };
-```
-
-## Installation
-
-```sh
-npm install --save-dev babel-plugin-ceval
-```
-
-## Usage
-
-### Via [.babelrc](http://babeljs.io/docs/usage/babelrc/) (Recommended)
-
-**.babelrc**
-
-```json
-{
-  "plugins": ["ceval"]
-}
-```
-
-### Via CLI
-
-```sh
-babel --plugins ceval script.js
-```
-
-### Via Node API
-
-```javascript
-require("babel-core").transform("code", {
-  plugins: ["ceval"]
-});
 ```
