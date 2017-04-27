@@ -177,9 +177,11 @@ var obj = {
 
 ### <a id="toc-ex9"></a>Return a Promise
 
-If you need to return promise, make sure to install [deasync](https://github.com/abbr/deasync)
+If you need to return a promise, make sure to install [deasync](https://github.com/abbr/deasync) too.
 
-```npm install --save-dev deasync```
+```sh
+npm install --save-dev deasync
+```
 
 ```javascript
 // In:
