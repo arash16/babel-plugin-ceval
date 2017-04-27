@@ -11,7 +11,7 @@
 - [Examples](#toc-examples)
   - [Reading environment variables](#toc-ex1)
   - [Current source directory / filename](#toc-ex2)
-  - [Version information inside package.json](#toc-ex3)
+  - [Version information from package.json](#toc-ex3)
   - [Generate js code via js code](#toc-ex4)
   - [Return string from ceval(fn: function)](#toc-ex5)
   - [Different functions for different environments](#toc-ex6)
@@ -77,7 +77,7 @@ var dirname = '/home/arash16/Projects/ceval-test';
 var filename = '/home/arash16/Projects/ceval-test/test.js';
 ```
 
-### <a id="toc-ex3"></a>Version information inside package.json
+### <a id="toc-ex3"></a>Version information from package.json
 
 ```javascript
 // In:
