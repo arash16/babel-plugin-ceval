@@ -1,4 +1,5 @@
 # babel-plugin-ceval
+[![NPM version](https://img.shields.io/npm/v/babel-plugin-ceval.svg)](https://www.npmjs.com/package/babel-plugin-ceval)
 
 > This plugin allows [Babel](https://babeljs.io) to execute ceval functions at compile time.
 
