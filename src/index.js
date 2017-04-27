@@ -2,6 +2,24 @@ const fs = require('fs');
 const _path = require('path');
 
 export default function ({ transform, transformFromAst, traverse, types: t }) {
+	function unPromise(p) {
+		if (typeof p != 'object') return p;
+		if (typeof (p.then) != 'function') return p;
+
+		let done = false,
+			result, err;
+		p.then(function(val) {
+			done = true;
+			result = val;
+		}, function(e) {
+			done = true;
+			err = e;
+		});
+		require('deasync').loopWhile(function(){ return !done; });
+		if (err) throw err;
+		return result;
+	}
+
 	function makeLiteral(value) {
 		switch (typeof value) {
 			case 'string': return t.stringLiteral(value);
@@ -18,7 +36,7 @@ export default function ({ transform, transformFromAst, traverse, types: t }) {
 					let vals = value.toString().split('/');
 					return t.regExpLiteral(vals[1], vals[2]);
 				}
-				
+
 				if (Array.isArray(value)) {
 					let result = t.arrayExpression();
 					result.elements = value.map(makeLiteral);
@@ -57,7 +75,7 @@ export default function ({ transform, transformFromAst, traverse, types: t }) {
 			let c = process.cwd(), result;
 			try {
 				process.chdir(d);
-				result = fn.apply(persistentContext, args);
+				result = unPromise(fn.apply(persistentContext, args));
 			}
 			finally {
 				process.chdir(c);

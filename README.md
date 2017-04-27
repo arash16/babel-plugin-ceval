@@ -17,6 +17,7 @@
   - [Different functions for different environments](#toc-ex6)
   - [Reading outside variables (they must be statically evaluatable)](#toc-ex7)
   - [Return complete objects](#toc-ex8)
+  - [Return a Promise](#toc-ex9)
 
 
 ## <a id="toc-install"></a>Installation
@@ -90,10 +91,10 @@ var version = '1.0.0';
 ```javascript
 // In:
 ceval(function() {
-	var r = '';
-	for (var i=0; i<4; ++i)
-		r += 'console.log('+i+');';
-	return r;
+  var r = '';
+  for (var i=0; i<4; ++i)
+    r += 'console.log('+i+');';
+  return r;
 });
 // Out:
 console.log(0);console.log(1);console.log(2);console.log(3);
@@ -104,10 +105,10 @@ console.log(0);console.log(1);console.log(2);console.log(3);
 ```javascript
 // In:
 var code = ceval(function() {
-	var r = '';
-	for (var i=0; i<3; ++i)
-		r += 'console.log('+i+');';
-	return JSON.stringify(r);
+  var r = '';
+  for (var i=0; i<3; ++i)
+    r += 'console.log('+i+');';
+  return JSON.stringify(r);
 });
 // Out:
 var code = 'console.log(0);console.log(1);console.log(2);';
@@ -118,18 +119,18 @@ var code = 'console.log(0);console.log(1);console.log(2);';
 ```javascript
 // In:
 ceval(function() {
-	if (process.env.SERVER)
-		return function checker(x) { 
-			return x>2; 
-		};
-	
-	return function checker(x) { 
-		return x>0; 
-	};
+  if (process.env.SERVER)
+    return function checker(x) { 
+      return x>2; 
+    };
+  
+  return function checker(x) { 
+    return x>0; 
+  };
 });
 // Out:
 function checker(x) {
-	return x > 0;
+  return x > 0;
 }
 ```
 
@@ -139,7 +140,7 @@ function checker(x) {
 // In:
 const X = 1, Y = 2;
 ceval(function(a, b) {
-	return 'console.log(' + (a+b) + ');';
+  return 'console.log(' + (a+b) + ');';
 }, X, Y);
 // Out:
 const X = 1,
@@ -152,24 +153,45 @@ console.log(3);
 ```javascript
 // In:
 var obj = ceval(function() {
-	return {
-		regex: /abc/g,
-		str: 'asdas',
-		arr: [1,2, { x: 1}],
-		fn: function (a, b) {
-			return a + b;
-		}
-	};
+  return {
+    regex: /abc/g,
+    str: 'asdas',
+    arr: [1,2, { x: 1}],
+    fn: function (a, b) {
+      return a + b;
+    }
+  };
 });
 // Out:
 var obj = {
-	'regex': /abc/g,
-	'str': 'asdas',
-	'arr': [1, 2, {
-		'x': 1
-	}],
-	'fn': function (a, b) {
-		return a + b;
-	}
+  'regex': /abc/g,
+  'str': 'asdas',
+  'arr': [1, 2, {
+    'x': 1
+  }],
+  'fn': function (a, b) {
+    return a + b;
+  }
 };
+```
+
+### <a id="toc-ex9"></a>Return a Promise
+
+If you need to return promise, make sure to install [deasync](https://github.com/abbr/deasync)
+
+```npm install --save-dev deasync```
+
+```javascript
+// In:
+ceval(function() {
+  return Promise
+    .resolve('read from database')
+    .then(x => `function dyna() {
+      return ${JSON.stringify(x.split(' '))};
+    }`);
+});
+// Out:
+function dyna() {
+  return ["read", "from", "database"];
+}
 ```
