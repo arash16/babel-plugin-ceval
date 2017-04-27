@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-ceval",
-  "version": "1.7.1",
+  "version": "1.7.2",
   "description": "a babel pluging for compile time evaluation.",
   "main": "lib/index.js",
   "scripts": {
@@ -13,6 +13,10 @@
   "keywords": [
     "babel-plugin",
     "transpiler",
+    "generation",
+    "metacode",
+    "build",
+    "macro",
     "ceval",
     "eval"
   ],
