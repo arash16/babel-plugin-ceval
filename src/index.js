@@ -44,9 +44,9 @@ export default function ({ transform, transformFromAst, traverse, types: t }) {
 				}
 
 				return t.objectExpression(
-					Object.keys(value).map(key => 
+					Object.keys(value).map(key =>
 						t.objectProperty(
-							t.stringLiteral(key), 
+							t.stringLiteral(key),
 							makeLiteral(value[key])
 						)
 					)
@@ -91,10 +91,10 @@ export default function ({ transform, transformFromAst, traverse, types: t }) {
 				const { node } = path;
 				if (!t.isIdentifier(node.callee, {name: 'ceval'})) return;
 				let filename = _path.resolve(node.loc.filename || path.hub.file.opts.filename);
-				let params = {
+				let params = Object.assign({
 					__filename: filename,
 					__dirname: _path.dirname(filename)
-				};
+				}, state.opts || {});
 
 
 				let args = path.get('arguments'),
@@ -103,7 +103,7 @@ export default function ({ transform, transformFromAst, traverse, types: t }) {
 
 				if (arg1.confident) {
 					if (typeof arg1.value!='string' || args.length>1) return;
-					
+
 					let code = arg1.value;
 					if (code.indexOf('return'))
 						code = 'return (' + code + ')';
@@ -150,6 +150,29 @@ export default function ({ transform, transformFromAst, traverse, types: t }) {
 					else path.replaceWith(nd);
 				}
 				else path.remove();
+			},
+			IfStatement: {
+				exit(path) {
+					let cr = path.get('test').evaluate();
+					if (!cr.confident) return;
+
+					const { node } = path;
+					let result = cr.value ? node.consequent : node.alternate;
+					if (!result) path.remove();
+					else if (t.isBlockStatement(result))
+						path.replaceWithMultiple(result.body);
+					else
+						path.replaceWith(result);
+				}
+			},
+			ConditionalExpression: {
+				exit(path) {
+					let cr = path.get('test').evaluate();
+					if (!cr.confident) return;
+
+					const { node } = path;
+					path.replaceWith(cr.value ? node.consequent : node.alternate);
+				}
 			}
 		}
 	}

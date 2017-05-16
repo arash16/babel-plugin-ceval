@@ -1,10 +1,10 @@
 {
   "name": "babel-plugin-ceval",
-  "version": "1.7.2",
+  "version": "1.8.0",
   "description": "a babel pluging for compile time evaluation.",
   "main": "lib/index.js",
   "scripts": {
-    "compile": "babel src/index.js -o lib/index.js"
+    "build": "babel src/index.js -o lib/index.js"
   },
   "repository": {
     "type": "git",
@@ -20,7 +20,7 @@
     "ceval",
     "eval"
   ],
-  "author": "Arash Shakery <arash.shakery@gmail.com>",
+  "author": "Arash Shakery <arash.shakery@gmail.com> (arash16.com)",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/arash16/babel-plugin-ceval/issues"
