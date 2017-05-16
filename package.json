@@ -11,6 +11,7 @@
     "url": "git+https://github.com/arash16/babel-plugin-ceval.git"
   },
   "keywords": [
+  	"babel", "compiler",
     "babel-plugin",
     "transpiler",
     "generation",
