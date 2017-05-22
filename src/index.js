@@ -86,71 +86,76 @@ export default function ({ transform, transformFromAst, traverse, types: t }) {
 
 
 	return {
-		visitor: {
-			CallExpression (path, state) {
-				const { node } = path;
-				if (!t.isIdentifier(node.callee, {name: 'ceval'})) return;
-				let filename = _path.resolve(node.loc.filename || path.hub.file.opts.filename);
-				let params = Object.assign({
-					__filename: filename,
-					__dirname: _path.dirname(filename)
-				}, state.opts || {});
+		pre(file) {
+			let opts = file.opts.plugins.filter(x=> x[0].key=='ceval')[0][1] || {};
+			traverse(file.ast, {
+				CallExpression (path) {
+					const { node } = path;
+					if (!t.isIdentifier(node.callee, {name: 'ceval'})) return;
+					let filename = _path.resolve(node.loc.filename || path.hub.file.opts.filename);
+					let params = Object.assign({
+						__filename: filename,
+						__dirname: _path.dirname(filename)
+					}, opts || {});
 
 
-				let args = path.get('arguments'),
-					arg1 = args[0].evaluate(),
-					nd;
+					let args = path.get('arguments'),
+						arg1 = args[0].evaluate(),
+						nd;
 
-				if (arg1.confident) {
-					if (typeof arg1.value!='string' || args.length>1) return;
+					if (arg1.confident) {
+						if (typeof arg1.value!='string' || args.length>1) return;
 
-					let code = arg1.value;
-					if (code.indexOf('return'))
-						code = 'return (' + code + ')';
-					let res = compileFunction(code, params)();
-					nd = makeLiteral(res);
-				}
-				else if (t.isFunction(args[0])) {
-					let funcNode = args[0].node;
-					if (funcNode.params.length+1 != args.length) return;
-
-					for (let i=0; i<funcNode.params.length; ++i) {
-						let ev = args[i+1].evaluate();
-						params[funcNode.params[i].name] = ev.confident ? ev.value : void 0;
+						let code = arg1.value;
+						if (code.indexOf('return'))
+							code = 'return (' + code + ')';
+						let res = compileFunction(code, params)();
+						nd = makeLiteral(res);
 					}
+					else if (t.isFunction(args[0])) {
+						let funcNode = args[0].node;
+						if (funcNode.params.length+1 != args.length) return;
 
-					let code = transformFromAst(t.program(funcNode.body.body)).code,
-						res = compileFunction(code, params)();
-
-					if (typeof res == 'string') {
-						let ast = transform(res, {code: false}).ast;
-						nd = !ast.program.body.length && ast.program.directives.length
-							? t.stringLiteral(ast.program.directives[0].value.value)
-							: ast.program.body;
-					}
-					else nd = makeLiteral(res);
-				}
-				else return;
-
-				if (nd) {
-					traverse.removeProperties(nd);
-					if (t.isFunction(nd)) {
-						if (t.isExpressionStatement(path.parent) && nd.id && nd.id.name) {
-							nd.type = 'FunctionDeclaration';
-							path.parentPath.replaceWith(nd);
-							return;
+						for (let i=0; i<funcNode.params.length; ++i) {
+							let ev = args[i+1].evaluate();
+							params[funcNode.params[i].name] = ev.confident ? ev.value : void 0;
 						}
 
-						else nd.type = 'FunctionExpression';
+						let code = transformFromAst(t.program(funcNode.body.body)).code,
+							res = compileFunction(code, params)();
+
+						if (typeof res == 'string') {
+							let ast = transform(res, {code: false}).ast;
+							nd = !ast.program.body.length && ast.program.directives.length
+								? t.stringLiteral(ast.program.directives[0].value.value)
+								: ast.program.body;
+						}
+						else nd = makeLiteral(res);
 					}
-					if (Array.isArray(nd)) {
-						if (!nd.length) path.remove();
-						else path.replaceWithMultiple(nd);
+					else return;
+
+					if (nd) {
+						traverse.removeProperties(nd);
+						if (t.isFunction(nd)) {
+							if (t.isExpressionStatement(path.parent) && nd.id && nd.id.name) {
+								nd.type = 'FunctionDeclaration';
+								path.parentPath.replaceWith(nd);
+								return;
+							}
+
+							else nd.type = 'FunctionExpression';
+						}
+						if (Array.isArray(nd)) {
+							if (!nd.length) path.remove();
+							else path.replaceWithMultiple(nd);
+						}
+						else path.replaceWith(nd);
 					}
-					else path.replaceWith(nd);
+					else path.remove();
 				}
-				else path.remove();
-			},
+			});
+		},
+		visitor: {
 			IfStatement: {
 				exit(path) {
 					let cr = path.get('test').evaluate();
